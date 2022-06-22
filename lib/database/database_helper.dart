@@ -66,6 +66,13 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
+  // All of the rows are returned as a list of maps, where each map is
+  // a key-value list of N columns like the akaber we are.
+  Future<List<Map<String, dynamic>>> queryNRows(int n) async {
+    Database db = await instance.database;
+    return await db.query(table,limit: n,);
+  }
+
   // All of the methods (insert, query, update, delete) can also be done using
   // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {
@@ -89,15 +96,4 @@ class DatabaseHelper {
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
-  void fix( ) async {
-    Database db = _database;
-       await db.execute('''
-          CREATE TABLE nizartable (
-            $columnId INTEGER PRIMARY KEY,
-            $columnLong INTEGER NOT NULL,
-            $columnLat INTEGER NOT NULL
-          )
-          ''');
-      
-  }
 }

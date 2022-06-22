@@ -1,15 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:carp_background_location/carp_background_location.dart';
+
 import '../carpBackground/carp_location.dart' as CL;
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'background_wifi.dart';
+
+
+
 
 const EVENTS_KEY = "fetch_events";
 
-void backgroundFetchHeadlessTask( HeadlessTask task) async {
+void backgroundFetchHeadlessTasks( HeadlessTask task) async {
   var taskId = task.taskId;
   var timeout = task.timeout;
   if (timeout) {
@@ -28,7 +35,8 @@ void backgroundFetchHeadlessTask( HeadlessTask task) async {
 
   var prefs = await SharedPreferences.getInstance();
   if (taskId == "com.dawwar.yami") {
-    CL.start();
+    BackgroundFetch.start();
+    await LocationManager().start();
   }
   var events = <String>[];
   var json = prefs.getString(EVENTS_KEY);
@@ -40,11 +48,13 @@ void backgroundFetchHeadlessTask( HeadlessTask task) async {
 
 
   if (taskId == 'flutter_background_fetch') {
-    CL.start();
-    print('bobobobobo');
+    BackgroundFetch.start();
+    await AndroidAlarmManager.periodic(
+        const Duration(seconds: 10), 999, onWifiAvailable, exact: true,
+        wakeup: true);
     BackgroundFetch.scheduleTask(TaskConfig(
         taskId: "com.dawwar.yami",
-        delay: 69420,
+        delay: 420,
         periodic: false,
         forceAlarmManager: false,
         stopOnTerminate: false,
@@ -58,6 +68,8 @@ void backgroundFetchHeadlessTask( HeadlessTask task) async {
 Future<void> initPlatformState() async {
   var prefs = await SharedPreferences.getInstance();
   var json = prefs.getString(EVENTS_KEY);
+
+
   if (json != null) {
 
   }
@@ -65,7 +77,7 @@ Future<void> initPlatformState() async {
   // Configure BackgroundFetch.
   try {
     var status = await BackgroundFetch.configure(BackgroundFetchConfig(
-        minimumFetchInterval: 5,
+        minimumFetchInterval: 15,
         forceAlarmManager: false,
         stopOnTerminate: false,
         startOnBoot: true,
