@@ -60,6 +60,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
     version: ^0.0.0
+  image_picker: ^0.8.5+3
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,7 @@ flutter:
     - assets/images/profileicon.jpg
     - assets/images/profileicon.png
     - assets/images/Bcardicon.jpg
+    - assets/faces/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

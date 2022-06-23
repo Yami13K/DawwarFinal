@@ -7,6 +7,7 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/screens/CreatProfile.dart';
+import 'package:untitled/screens/suggestion_list.dart';
 
 import 'package:workmanager/workmanager.dart';
 
@@ -79,7 +80,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context)
   {
 return MaterialApp(
-  home: MapView(),
+  debugShowCheckedModeBanner: false,
+  home: suggestions(),
 );
 
 }}
